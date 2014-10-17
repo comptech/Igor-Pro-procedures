@@ -1,0 +1,25 @@
+Function ExcelQuickGaussStore(peakwave,s_peakwave, Intensity, DSP)  
+// Example ExcelQuickGaussStore(Pt_DSP,Pt_DSP_s,Spodumene_003_Intensity,Spodumene_003_Dsp)
+
+    Wave Intensity, DSP
+    Wave peakwave, s_peakwave
+       Wave W_coef, W_sigma
+       Variable currentsize = numpnts(peakwave)
+       InsertPoints currentsize, 1,  peakwave, s_peakwave
+       CurveFit /Q gauss Intensity[pcsr(A), pcsr(B)]/X = DSP/D
+       peakwave[currentsize] = W_coef[2]
+       s_peakwave[currentsize] = W_sigma[2]
+       Print W_coef[2], "+/-",W_sigma[2]
+ // This function takes values from curve fitting to a guassian and automatically
+// puts them into a table along with the errors
+ //  The d-space value goes to a _DSP wave and the error goes into a seperate _DSP_s
+// wave
+ //  Make the _DSP and _DSP_s wave first and append them to a table, after each
+// curve fitting the value will added to subsequent points
+ //  The cursors need to be at the appropriate points on the graph you are fitting
+ //  This function is intended for waves that have been converted from two-theta to
+// d-spacing
+ //  The function is adaptable for two-theta waves just by substituting _twotheta
+// wherever there is dsp in the function
+End
+
